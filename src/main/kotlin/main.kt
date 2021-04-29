@@ -1,11 +1,9 @@
 import java.text.SimpleDateFormat
-import kotlin.math.log
-
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
     articleRepository.makeTestArticles()
-    memberRepository.makeTestMembers()
+    memberRepository.makeTestMember()
     var loginedMember : Member? = null
 
     while (true) {
@@ -66,29 +64,37 @@ fun main() {
                     println("${id}번 게시물은 존재하지 않습니다.")
                     continue
                 }
+
                 val writer = memberRepository.getMemberById(article.memberId)!!
+
                 println("번호 : ${article.id}")
                 println("작성날짜 : ${article.regDate}")
                 println("갱신날짜 : ${article.updateDate}")
-                println("닉네임 : ${writer.nickname}")
+                println("작성자 : ${writer.nickname}")
                 println("제목 : ${article.title}")
                 println("내용 : ${article.body}")
             }
             "/article/modify" -> {
+                if(loginedMember == null){
+                    println("로그인 후 이용해주세요")
+                    continue
+                }
                 val id = rq.getIntParam("id", 0)
 
                 if (id == 0) {
                     println("id를 입력해주세요.")
                     continue
                 }
-
                 val article = articleRepository.getArticleById(id)
 
                 if (article == null) {
                     println("${id}번 게시물은 존재하지 않습니다.")
                     continue
                 }
-
+                if(article.memberId != loginedMember.id){
+                    println("본인의 게시물만 수정할수 있습니다")
+                    continue
+                }
                 print("${id}번 게시물 새 제목 : ")
                 val title = readLineTrim()
                 print("${id}번 게시물 새 내용 : ")
@@ -99,6 +105,10 @@ fun main() {
                 println("${id}번 게시물이 수정되었습니다.")
             }
             "/article/delete" -> {
+                if(loginedMember == null){
+                    println("로그인 후 이용해주세요")
+                    continue
+                }
                 val id = rq.getIntParam("id", 0)
 
                 if (id == 0) {
@@ -112,15 +122,19 @@ fun main() {
                     println("${id}번 게시물은 존재하지 않습니다.")
                     continue
                 }
-
+                if(article.memberId != loginedMember.id){
+                    println("본인의 게시물만 삭제할수 있습니다")
+                    continue
+                }
                 articleRepository.deleteArticle(article)
+                println("${id}번 게시물이 삭제되었습니다.")
             }
             "/member/join" -> {
                 print("로그인 아이디 : ")
                 val loginId = readLineTrim()
-                val checkOverlaploginId = memberRepository.checkOverlaploginId(loginId)
-                if(checkOverlaploginId != null){
-                    println("이미 누군가 사용중인 로그인아이디 입니다")
+                val loginIdOverlap = memberRepository.loginIdOverlap(loginId)
+                if(!loginIdOverlap){
+                    println("이미 누군가 사용중인 로그인 아이디 입니다")
                     continue
                 }
                 print("로그인 패스워드 : ")
@@ -133,30 +147,34 @@ fun main() {
                 val cellphoneNo = readLineTrim()
                 print("이메일 : ")
                 val email = readLineTrim()
+
                 memberRepository.addMember(loginId, loginPw, name, nickname, cellphoneNo, email)
-                println("${nickname}님 환영홥니다")
+                println("${nickname}님 환영합니다")
             }
-            "/member/login" -> {
+            "/member/login" ->{
                 print("로그인 아이디 : ")
                 val loginId = readLineTrim()
                 val loginCheck = memberRepository.getMemberByLoginId(loginId)
                 if(loginCheck == null){
-                    println("존재하지 않는 회원입니다")
+                    println("아이디를 확인해주세요")
                     continue
                 }
                 print("로그인 패스워드 : ")
                 val loginPw = readLineTrim()
-                if(loginCheck.loginPw != loginPw){
-                    println("패스워드가 일치하지 않습니다")
+                if (loginCheck.loginPw != loginPw){
+                    println("패스워르들 확인해주세요")
                     continue
                 }
+
                 loginedMember = loginCheck
                 println("${loginedMember.nickname}님 환영합니다")
             }
             "/member/logout" ->{
                 loginedMember = null
                 println("로그아웃 되었습니다")
+                continue
             }
+
         }
     }
 
@@ -232,54 +250,8 @@ class Rq(command: String) {
             default
         }
     }
-
-
 }
-// 멤버관련 시작
-data class Member(val id : Int, val regDate: String, var updateDate: String, val loginId : String, var loginPw : String, var name : String, var nickname : String, var cellphoneNo : String, var email : String){}
 
-object memberRepository{
-    var members = mutableListOf<Member>()
-    var lastId = 0
-
-    fun addMember(loginId: String, loginPw: String, name: String, nickname: String, cellphoneNo: String, email: String){
-        var id = ++lastId
-        val regDate = Util.getNowDateStr()
-        val updateDate = Util.getNowDateStr()
-        members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
-    }
-
-    fun checkOverlaploginId(loginId: String): Boolean {
-        val member = getMemberByLoginId(loginId)
-        return member == null
-    }
-
-    fun getMemberByLoginId(loginId: String): Member? {
-        for (member in members){
-            if(member.loginId == loginId){
-                return member
-            }
-        }
-        return null
-    }
-
-    fun makeTestMembers(){
-        for (i in 1 .. 5){
-            addMember("user$i", "user$i", "name$i", "nickname$i", "cellphoneNo$i", "email$i")
-        }
-    }
-
-    fun getMemberById(id: Int): Member? {
-        for (member in members){
-            if(member.id == id){
-                return member
-            }
-        }
-        return null
-    }
-
-}
-// 멤버관련 끝
 // 게시물 관련 시작
 data class Article(
     val id: Int,
@@ -318,8 +290,8 @@ object articleRepository {
     }
 
     fun makeTestArticles() {
-        for (i in 1..100) {
-            addArticle(i % 5 + 1, "제목_$i", "내용_$i")
+        for (id in 1..100) {
+            addArticle(id % 5 + 1,"제목_$id", "내용_$id")
         }
     }
 
@@ -370,7 +342,52 @@ object articleRepository {
     }
 }
 // 게시물 관련 끝
+// 멤버 관련 시작
+data class Member(val id : Int, val regDate: String, var updateDate: String, val loginId : String, var loginPw : String, var name : String, var nickname : String, var cellphoneNo : String, var email : String){}
 
+object memberRepository{
+    var members = mutableListOf<Member>()
+    var lastId = 0
+
+    fun addMember(loginId: String, loginPw: String, name: String, nickname: String, cellphoneNo: String, email: String) {
+        val id = ++lastId
+        val regDate = Util.getNowDateStr()
+        val updateDate = Util.getNowDateStr()
+        members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
+    }
+
+    fun makeTestMember(){
+        for(i in 1 .. 5){
+            addMember("user$i", "user$i", "name$i", "nickname$i", "cellphoneNo$i", "email$i")
+        }
+    }
+
+    fun loginIdOverlap(loginId: String): Boolean {
+        val member = getMemberByLoginId(loginId)
+        return member == null
+    }
+
+    fun getMemberByLoginId(loginId: String): Member? {
+        for (member in members){
+            if (member.loginId == loginId){
+                return member
+            }
+        }
+        return null
+    }
+
+    fun getMemberById(memberId: Int): Member? {
+        for (member in members){
+            if(member.id == memberId){
+                return member
+            }
+        }
+        return null
+    }
+
+}
+
+// 멤버 관련 끝
 // 유틸 관련 시작
 fun readLineTrim() = readLine()!!.trim()
 
