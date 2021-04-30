@@ -3,7 +3,7 @@ val memberController = MemberController()
 val articleController = ArticleController()
 val boardController = BoardController()
 
-var loginedMember : Member? = null
+var loginedMember: Member? = null
 
 val articleRepository = ArticleRepository()
 val memberRepository = MemberRepository()
@@ -16,10 +16,9 @@ fun main() {
     boardRepository.makeTestBoard()
 
     while (true) {
-        val prompt = if(loginedMember != null){
+        val prompt = if (loginedMember != null) {
             "${loginedMember!!.nickname} : "
-        }
-        else{
+        } else {
             "명령어 : "
         }
         print(prompt)
@@ -50,10 +49,10 @@ fun main() {
             "/member/join" -> {
                 memberController.join(rq)
             }
-            "/member/login" ->{
+            "/member/login" -> {
                 memberController.login(rq)
             }
-            "/member/logout" ->{
+            "/member/logout" -> {
                 memberController.logout(rq)
             }
             "/board/list" -> {

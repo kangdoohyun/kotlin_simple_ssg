@@ -104,12 +104,19 @@ class ArticleController{
             println("로그인 후 이용해주세요")
             return
         }
+        println("공지 : 1, 자유: 2")
         print("제목 : ")
         val title = readLineTrim()
         print("내용 : ")
         val body = readLineTrim()
         print("게시판 번호 : ")
         val boardId = readLineTrim().toInt()
+        val searchExistBoard = boardRepository.getBoardById(boardId)
+        if(searchExistBoard == null){
+            println("존재하지 않는 게시판입니다")
+            return
+        }
+
         val id = articleRepository.addArticle(boardId, loginedMember!!.id, title, body)
 
         println("${id}번 게시물이 추가되었습니다.")
