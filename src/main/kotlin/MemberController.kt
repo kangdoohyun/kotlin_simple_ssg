@@ -1,21 +1,21 @@
-class MemberController{
-    fun logout(rq:Rq){
+class MemberController {
+    fun logout(rq: Rq) {
         loginedMember = null
         println("로그아웃 되었습니다")
         return
     }
 
-    fun login(rq: Rq){
+    fun login(rq: Rq) {
         print("로그인 아이디 : ")
         val loginId = readLineTrim()
         val loginCheck = memberRepository.getMemberByLoginId(loginId)
-        if(loginCheck == null){
+        if (loginCheck == null) {
             println("아이디를 확인해주세요")
             return
         }
         print("로그인 패스워드 : ")
         val loginPw = readLineTrim()
-        if (loginCheck.loginPw != loginPw){
+        if (loginCheck.loginPw != loginPw) {
             println("패스워르들 확인해주세요")
             return
         }
@@ -24,11 +24,11 @@ class MemberController{
         println("${loginedMember!!.nickname}님 환영합니다")
     }
 
-    fun join(rq: Rq){
+    fun join(rq: Rq) {
         print("로그인 아이디 : ")
         val loginId = readLineTrim()
         val loginIdOverlap = memberRepository.loginIdOverlap(loginId)
-        if(!loginIdOverlap){
+        if (!loginIdOverlap) {
             println("이미 누군가 사용중인 로그인 아이디 입니다")
             return
         }

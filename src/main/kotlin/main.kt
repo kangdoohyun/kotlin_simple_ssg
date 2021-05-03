@@ -11,9 +11,9 @@ val boardRepository = BoardRepository()
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
-    articleRepository.makeTestArticles()
     memberRepository.makeTestMember()
     boardRepository.makeTestBoard()
+    articleRepository.makeTestArticles()
 
     while (true) {
         val prompt = if (loginedMember != null) {
@@ -61,7 +61,9 @@ fun main() {
             "/board/add" -> {
                 boardController.add(rq)
             }
-
+            "/board/modify" -> {
+                boardController.modify(rq)
+            }
         }
     }
 

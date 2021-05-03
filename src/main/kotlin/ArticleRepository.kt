@@ -27,7 +27,7 @@ class ArticleRepository {
 
     fun makeTestArticles() {
         for (id in 1..100) {
-            addArticle(id % 2 + 1, id % 5 + 1,"제목_$id", "내용_$id")
+            addArticle(id % 2 + 1, id % 5 + 1, "제목_$id", "내용_$id")
         }
     }
 
@@ -62,8 +62,8 @@ class ArticleRepository {
     private fun getBoardIdFilteredArticles(articles: List<Article>, boardId: Int): List<Article> {
         val filteredArticles = mutableListOf<Article>()
 
-        for (article in articles){
-            if (article.boardId == boardId){
+        for (article in articles) {
+            if (article.boardId == boardId) {
                 filteredArticles.add(article)
             }
         }

@@ -1,8 +1,8 @@
-class BoardRepository{
+class BoardRepository {
     var boards = mutableListOf<Board>()
     var lastId = 0
 
-    fun addBoard(name: String, code: String){
+    fun addBoard(name: String, code: String) {
         val id = ++lastId
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
@@ -20,22 +20,22 @@ class BoardRepository{
     }
 
     private fun getBoardByName(name: String): Board? {
-        for (board in boards){
-            if(board.name == name){
+        for (board in boards) {
+            if (board.name == name) {
                 return board
             }
         }
         return null
     }
 
-    fun boardCodeDuplicateCheck(code: String): Any {
+    fun boardCodeDuplicateCheck(code: String): Boolean {
         val board = getBoardByCode(code)
         return board == null
     }
 
-    private fun getBoardByCode(code: String): Board? {
-        for (board in boards){
-            if(board.code == code){
+    fun getBoardByCode(code: String): Board? {
+        for (board in boards) {
+            if (board.code == code) {
                 return board
             }
         }
@@ -43,8 +43,8 @@ class BoardRepository{
     }
 
     fun getBoardById(boardId: Int): Board? {
-        for (board in boards){
-            if(board.id == boardId){
+        for (board in boards) {
+            if (board.id == boardId) {
                 return board
             }
         }

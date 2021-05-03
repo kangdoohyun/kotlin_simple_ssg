@@ -1,6 +1,6 @@
-class ArticleController{
-    fun delete(rq: Rq){
-        if(loginedMember == null){
+class ArticleController {
+    fun delete(rq: Rq) {
+        if (loginedMember == null) {
             println("로그인 후 이용해주세요")
             return
         }
@@ -17,7 +17,7 @@ class ArticleController{
             println("${id}번 게시물은 존재하지 않습니다.")
             return
         }
-        if(article.memberId != loginedMember!!.id){
+        if (article.memberId != loginedMember!!.id) {
             println("본인의 게시물만 삭제할수 있습니다")
             return
         }
@@ -26,7 +26,7 @@ class ArticleController{
     }
 
     fun modify(rq: Rq) {
-        if(loginedMember == null){
+        if (loginedMember == null) {
             println("로그인 후 이용해주세요")
             return
         }
@@ -42,7 +42,7 @@ class ArticleController{
             println("${id}번 게시물은 존재하지 않습니다.")
             return
         }
-        if(article.memberId != loginedMember!!.id){
+        if (article.memberId != loginedMember!!.id) {
             println("본인의 게시물만 수정할수 있습니다")
             return
         }
@@ -100,7 +100,7 @@ class ArticleController{
     }
 
     fun write(rq: Rq) {
-        if(loginedMember == null){
+        if (loginedMember == null) {
             println("로그인 후 이용해주세요")
             return
         }
@@ -112,7 +112,7 @@ class ArticleController{
         print("게시판 번호 : ")
         val boardId = readLineTrim().toInt()
         val searchExistBoard = boardRepository.getBoardById(boardId)
-        if(searchExistBoard == null){
+        if (searchExistBoard == null) {
             println("존재하지 않는 게시판입니다")
             return
         }

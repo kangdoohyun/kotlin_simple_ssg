@@ -1,16 +1,23 @@
-class MemberRepository{
+class MemberRepository {
     var members = mutableListOf<Member>()
     var lastId = 0
 
-    fun addMember(loginId: String, loginPw: String, name: String, nickname: String, cellphoneNo: String, email: String) {
+    fun addMember(
+        loginId: String,
+        loginPw: String,
+        name: String,
+        nickname: String,
+        cellphoneNo: String,
+        email: String
+    ) {
         val id = ++lastId
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
         members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
     }
 
-    fun makeTestMember(){
-        for(i in 1 .. 5){
+    fun makeTestMember() {
+        for (i in 1..5) {
             addMember("user$i", "user$i", "name$i", "nickname$i", "cellphoneNo$i", "email$i")
         }
     }
@@ -21,8 +28,8 @@ class MemberRepository{
     }
 
     fun getMemberByLoginId(loginId: String): Member? {
-        for (member in members){
-            if (member.loginId == loginId){
+        for (member in members) {
+            if (member.loginId == loginId) {
                 return member
             }
         }
@@ -30,8 +37,8 @@ class MemberRepository{
     }
 
     fun getMemberById(memberId: Int): Member? {
-        for (member in members){
-            if(member.id == memberId){
+        for (member in members) {
+            if (member.id == memberId) {
                 return member
             }
         }

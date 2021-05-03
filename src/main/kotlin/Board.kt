@@ -1,1 +1,1 @@
-data class Board(val id :Int, val regDate: String, val updateDate: String, val name: String, val code : String){}
+data class Board(val id: Int, var regDate: String, val updateDate: String, var name: String, var code: String) {}
