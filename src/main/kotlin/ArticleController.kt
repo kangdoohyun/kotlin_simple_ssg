@@ -85,7 +85,7 @@ class ArticleController {
     fun list(rq: Rq) {
         val page = rq.getIntParam("page", 1)
         val searchKeyword = rq.getStringParam("searchKeyword", "")
-        val boardId = rq.getIntParam("boardId", 1)
+        val boardId = rq.getIntParam("boardId", 0)
 
         val filteredArticles = articleRepository.getFilteredArticles(boardId, searchKeyword, page, 5)
 

@@ -48,6 +48,10 @@ class ArticleRepository {
     }
 
     private fun getSearchKeywordFilteredArticles(articles: List<Article>, searchKeyword: String): List<Article> {
+        if(searchKeyword.isEmpty()){
+            return articles
+        }
+
         val filteredArticles = mutableListOf<Article>()
 
         for (article in articles) {
@@ -60,6 +64,10 @@ class ArticleRepository {
     }
 
     private fun getBoardIdFilteredArticles(articles: List<Article>, boardId: Int): List<Article> {
+        if (boardId == 0){
+            return articles
+        }
+
         val filteredArticles = mutableListOf<Article>()
 
         for (article in articles) {
