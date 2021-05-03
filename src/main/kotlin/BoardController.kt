@@ -6,7 +6,7 @@ class BoardController {
         }
     }
 
-    fun add(rq: Rq) {
+    fun make(rq: Rq) {
         print("게시판 이름 : ")
         val name = readLineTrim()
         val boardNameDuplicateCheck = boardRepository.boardNameDuplicateCheck(name)
@@ -48,9 +48,9 @@ class BoardController {
             return
         }
 
-        board!!.name = newName
-        board!!.code = newCode
-        board!!.regDate = Util.getNowDateStr()
+        board.name = newName
+        board.code = newCode
+        board.regDate = Util.getNowDateStr()
 
         println("게시판이 수정되었습니다")
     }
@@ -64,7 +64,7 @@ class BoardController {
         }
 
         boardRepository.boards.remove(board)
-        println("${board!!.name}게시판이 삭제되었습니다")
+        println("${board.name}게시판이 삭제되었습니다")
     }
 
 }

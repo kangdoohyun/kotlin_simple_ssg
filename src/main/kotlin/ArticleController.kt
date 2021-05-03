@@ -110,6 +110,7 @@ class ArticleController {
         print("내용 : ")
         val body = readLineTrim()
         print("게시판 번호 : ")
+
         val boardId = readLineTrim().toInt()
         val searchExistBoard = boardRepository.getBoardById(boardId)
         if (searchExistBoard == null) {

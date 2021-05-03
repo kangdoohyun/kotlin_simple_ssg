@@ -15,6 +15,8 @@ fun main() {
     boardRepository.makeTestBoard()
     articleRepository.makeTestArticles()
 
+    loginedMember = memberRepository.getMemberById(1)
+
     while (true) {
         val prompt = if (loginedMember != null) {
             "${loginedMember!!.nickname} : "
@@ -58,8 +60,8 @@ fun main() {
             "/board/list" -> {
                 boardController.list(rq)
             }
-            "/board/add" -> {
-                boardController.add(rq)
+            "/board/make" -> {
+                boardController.make(rq)
             }
             "/board/modify" -> {
                 boardController.modify(rq)
