@@ -1,6 +1,6 @@
 class MemberRepository {
-    var members = mutableListOf<Member>()
-    var lastId = 0
+    private var members = mutableListOf<Member>()
+    private var lastId = 0
 
     fun addMember(
         loginId: String,

@@ -104,19 +104,30 @@ class ArticleController {
             println("로그인 후 이용해주세요")
             return
         }
-        println("공지 : 1, 자유: 2")
-        print("제목 : ")
-        val title = readLineTrim()
-        print("내용 : ")
-        val body = readLineTrim()
-        print("게시판 번호 : ")
+        print("게시판 종류")
+        val boards: List<Board> = boardRepository.getboards()
+        var boardSelectStr = ""
+        for (board in boards){
+            if (boardSelectStr.isNotEmpty()){
+                boardSelectStr += ", "
+            }
+            boardSelectStr += "${board.name}=${board.id}"
+        }
+        println("(${boardSelectStr})")
 
+        print("게시판 번호 : ")
         val boardId = readLineTrim().toInt()
         val searchExistBoard = boardRepository.getBoardById(boardId)
         if (searchExistBoard == null) {
             println("존재하지 않는 게시판입니다")
             return
         }
+        print("제목 : ")
+        val title = readLineTrim()
+        print("내용 : ")
+        val body = readLineTrim()
+
+
 
         val id = articleRepository.addArticle(boardId, loginedMember!!.id, title, body)
 

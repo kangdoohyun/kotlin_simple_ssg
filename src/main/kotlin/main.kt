@@ -69,6 +69,9 @@ fun main() {
             "/board/delete" -> {
                 boardController.delete(rq)
             }
+            else -> {
+                systemController.nonExistentCommand(rq)
+            }
         }
     }
 

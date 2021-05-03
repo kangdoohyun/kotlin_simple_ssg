@@ -1,6 +1,6 @@
 class BoardRepository {
     var boards = mutableListOf<Board>()
-    var lastId = 0
+    private var lastId = 0
 
     fun addBoard(name: String, code: String) {
         val id = ++lastId
@@ -49,5 +49,9 @@ class BoardRepository {
             }
         }
         return null
+    }
+
+    fun getboards(): List<Board> {
+        return boards
     }
 }
