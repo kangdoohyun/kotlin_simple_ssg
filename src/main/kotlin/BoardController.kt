@@ -31,6 +31,7 @@ class BoardController {
         val board = boardRepository.getBoardByCode(code)
         if (board == null) {
             println("존재하지 않는 게시판입니다")
+            return
         }
         print("수정할 게시판 이름 : ")
         val newName = readLineTrim()
@@ -52,6 +53,18 @@ class BoardController {
         board!!.regDate = Util.getNowDateStr()
 
         println("게시판이 수정되었습니다")
+    }
+
+    fun delete(rq: Rq) {
+        val code = rq.getStringParam("code", "")
+        val board = boardRepository.getBoardByCode(code)
+        if (board == null) {
+            println("존재하지 않는 게시판입니다")
+            return
+        }
+
+        boardRepository.boards.remove(board)
+        println("${board!!.name}게시판이 삭제되었습니다")
     }
 
 }

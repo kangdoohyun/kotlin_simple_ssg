@@ -64,6 +64,9 @@ fun main() {
             "/board/modify" -> {
                 boardController.modify(rq)
             }
+            "/board/delete" -> {
+                boardController.delete(rq)
+            }
         }
     }
 
