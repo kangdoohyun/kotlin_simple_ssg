@@ -1,11 +1,19 @@
 class MemberController {
     fun logout(rq: Rq) {
-        loginedMember = null
-        println("로그아웃 되었습니다")
-        return
+        if (loginedMember != null){
+            loginedMember = null
+            println("로그아웃 되었습니다")
+        }else {
+            println("로그인 후 이용해주세요")
+        }
+
     }
 
     fun login(rq: Rq) {
+        if (loginedMember != null){
+            println("로그아웃 후 로그인해주세요")
+            return
+        }
         print("로그인 아이디 : ")
         val loginId = readLineTrim()
         val loginCheck = memberRepository.getMemberByLoginId(loginId)
@@ -25,6 +33,10 @@ class MemberController {
     }
 
     fun join(rq: Rq) {
+        if (loginedMember != null){
+            println("로그인상태에선 회원가입을 할 수 없습니다")
+            return
+        }
         print("로그인 아이디 : ")
         val loginId = readLineTrim()
         val loginIdOverlap = memberRepository.loginIdOverlap(loginId)
