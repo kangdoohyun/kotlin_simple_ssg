@@ -60,6 +60,9 @@ fun main() {
             "/member/list" -> {
                 memberController.list()
             }
+            "/member/info" -> {
+                memberController.info(rq)
+            }
             "/board/list" -> {
                 boardController.list(rq)
             }

@@ -74,4 +74,33 @@ class MemberController {
             println("${member.id}  /  ${member.loginId}  /  ${member.name}  /  ${member.nickname}  /  ${member.cellphoneNo}  /  ${member.email}")
         }
     }
+
+    fun info(rq: Rq) {
+        if (loginedMember == null){
+            println("로그인 후 이용해주세요")
+            return
+        }
+        val id = rq.getIntParam("id", 0)
+        if (id == 0){
+            println("id 를 입력해주세요")
+        }
+        if (loginedMember!!.id != 1 && loginedMember!!.id != id){
+            println("관리자 이거나 본인이어야만 회원정보를 확인할 수 있습니다")
+            return
+        }
+        val member = memberRepository.getMemberById(id)
+        if (member == null){
+            println("존재하지 않는 회원입니다")
+            return
+        }
+        println("번호 : ${member.id}")
+        println("가입 날짜 : ${member.regDate}")
+        println("수정 날짜 : ${member.updateDate}")
+        println("아이디 : ${member.loginId}")
+        println("비밀번호 : ${member.loginPw}")
+        println("이름 : ${member.name}")
+        println("닉네임 : ${member.nickname}")
+        println("전화번호 : ${member.cellphoneNo}")
+        println("이메일 : ${member.email}")
+    }
 }
