@@ -46,4 +46,20 @@ class MemberController {
         memberRepository.addMember(loginId, loginPw, name, nickname, cellphoneNo, email)
         println("${nickname}님 환영합니다")
     }
+
+    fun list() {
+        if (loginedMember == null){
+            println("로그인 후 이용해주세요")
+            return
+        }
+        if (loginedMember!!.id != 1){
+            println("맴버 리스트는 관리자만 열수 있습니다")
+            return
+        }
+        val members = memberRepository.getMembers()
+        println("번호  /  아이디  /  이름  /  닉네임  /  전화번호  /  이메일")
+        for (member in members){
+            println("${member.id}  /  ${member.loginId}  /  ${member.name}  /  ${member.nickname}  /  ${member.cellphoneNo}  /  ${member.email}")
+        }
+    }
 }

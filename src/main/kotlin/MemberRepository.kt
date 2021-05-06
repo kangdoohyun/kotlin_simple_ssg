@@ -45,4 +45,8 @@ class MemberRepository {
         return null
     }
 
+    fun getMembers(): List<Member> {
+        return members
+    }
+
 }

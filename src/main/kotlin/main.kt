@@ -57,6 +57,9 @@ fun main() {
             "/member/logout" -> {
                 memberController.logout(rq)
             }
+            "/member/list" -> {
+                memberController.list()
+            }
             "/board/list" -> {
                 boardController.list(rq)
             }
