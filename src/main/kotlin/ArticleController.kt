@@ -86,8 +86,9 @@ class ArticleController {
         val page = rq.getIntParam("page", 1)
         val searchKeyword = rq.getStringParam("searchKeyword", "")
         val boardId = rq.getIntParam("boardId", 0)
+        val memberId = rq.getIntParam("memberId", 0)
 
-        val filteredArticles = articleRepository.getFilteredArticles(boardId, searchKeyword, page, 5)
+        val filteredArticles = articleRepository.getFilteredArticles(memberId, boardId, searchKeyword, page, 5)
 
         println("번호 / 작성날짜 / 게시판 / 작성자 / 제목")
 

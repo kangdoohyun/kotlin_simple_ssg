@@ -39,16 +39,38 @@ class ArticleRepository {
         article.updateDate = Util.getNowDateStr()
     }
 
-    fun getFilteredArticles(boardId: Int, searchKeyword: String, page: Int, itemsCountInAPage: Int): List<Article> {
+    fun getFilteredArticles(
+        memberId: Int,
+        boardId: Int,
+        searchKeyword: String,
+        page: Int,
+        itemsCountInAPage: Int
+    ): List<Article> {
         val filtered1Articles = getSearchKeywordFilteredArticles(articles, searchKeyword)
         val filtered2Articles = getBoardIdFilteredArticles(filtered1Articles, boardId)
-        val filtered3Articles = getPageFilteredArticles(filtered2Articles, page, itemsCountInAPage)
+        val filtered3Articles = getMemberIdFilteredArticles(filtered2Articles, memberId)
+        val filtered4Articles = getPageFilteredArticles(filtered3Articles, page, itemsCountInAPage)
 
-        return filtered3Articles
+        return filtered4Articles
+    }
+
+    private fun getMemberIdFilteredArticles(articles: List<Article>, memberId: Int): List<Article> {
+        if (memberId == 0){
+            return articles
+        }
+
+        val filteredArticles = mutableListOf<Article>()
+
+        for (article in articles){
+            if (article.memberId == memberId){
+                filteredArticles.add(article)
+            }
+        }
+        return filteredArticles
     }
 
     private fun getSearchKeywordFilteredArticles(articles: List<Article>, searchKeyword: String): List<Article> {
-        if(searchKeyword.isEmpty()){
+        if (searchKeyword.isEmpty()) {
             return articles
         }
 
@@ -64,7 +86,7 @@ class ArticleRepository {
     }
 
     private fun getBoardIdFilteredArticles(articles: List<Article>, boardId: Int): List<Article> {
-        if (boardId == 0){
+        if (boardId == 0) {
             return articles
         }
 
