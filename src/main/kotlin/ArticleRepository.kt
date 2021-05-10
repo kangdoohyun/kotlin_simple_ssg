@@ -1,3 +1,8 @@
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import java.io.File
+
+
 class ArticleRepository {
     private val articles = mutableListOf<Article>()
     private var lastId = 0
@@ -21,6 +26,10 @@ class ArticleRepository {
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
         articles.add(Article(id, regDate, updateDate, memberId, boardId, title, body))
+        // jackson 파일 저장
+        val article = Article(id, regDate, updateDate, memberId, boardId, title, body)
+        val mapper = ObjectMapper()
+        mapper.writerWithDefaultPrettyPrinter().writeValue(File("./file/article/${id}.json"), article)
 
         return id
     }
