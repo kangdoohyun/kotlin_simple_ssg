@@ -1,11 +1,30 @@
-
-import com.fasterxml.jackson.databind.ObjectMapper
-import java.io.File
-
-
 class ArticleRepository {
     private val articles = mutableListOf<Article>()
-    private var lastId = 0
+
+    fun getArticles(): MutableList<Article> {
+        val lastId = getLastId()
+        val articles = mutableListOf<Article>()
+        for (id in 1..lastId) {
+            val jsonStr = readStrFromFile("data/article/$id.json")
+            val jsonMap = mapFromJson(jsonStr)
+            articles.add(
+                Article(
+                    jsonMap["id"].toString().toInt(),
+                    jsonMap["regDate"].toString(),
+                    jsonMap["updateDate"].toString(),
+                    jsonMap["memberId"].toString().toInt(),
+                    jsonMap["boardId"].toString().toInt(),
+                    jsonMap["title"].toString(),
+                    jsonMap["body"].toString()
+                )
+            )
+        }
+        return articles
+    }
+
+    private fun getLastId(): Int {
+        return readIntFromFile("data/article/lastId.txt")
+    }
 
     fun deleteArticle(article: Article) {
         articles.remove(article)
@@ -22,22 +41,13 @@ class ArticleRepository {
     }
 
     fun addArticle(boardId: Int, memberId: Int, title: String, body: String): Int {
-        val id = ++lastId
+        val id = getLastId() + 1
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
-        articles.add(Article(id, regDate, updateDate, memberId, boardId, title, body))
-        // jackson 파일 저장
         val article = Article(id, regDate, updateDate, memberId, boardId, title, body)
-        val mapper = ObjectMapper()
-        mapper.writerWithDefaultPrettyPrinter().writeValue(File("./file/article/${id}.json"), article)
-
+        writeStrFile("data/article/$id.json", article.toJson())
+        writeIntFile("data/article/lastId.txt", id)
         return id
-    }
-
-    fun makeTestArticles() {
-        for (id in 1..100) {
-            addArticle(id % 2 + 1, id % 5 + 1, "제목_$id", "내용_$id")
-        }
     }
 
     fun modifyArticle(id: Int, title: String, body: String) {
@@ -55,7 +65,7 @@ class ArticleRepository {
         page: Int,
         itemsCountInAPage: Int
     ): List<Article> {
-        val filtered1Articles = getSearchKeywordFilteredArticles(articles, searchKeyword)
+        val filtered1Articles = getSearchKeywordFilteredArticles(getArticles(), searchKeyword)
         val filtered2Articles = getBoardIdFilteredArticles(filtered1Articles, boardId)
         val filtered3Articles = getMemberIdFilteredArticles(filtered2Articles, memberId)
         val filtered4Articles = getPageFilteredArticles(filtered3Articles, page, itemsCountInAPage)
@@ -64,14 +74,14 @@ class ArticleRepository {
     }
 
     private fun getMemberIdFilteredArticles(articles: List<Article>, memberId: Int): List<Article> {
-        if (memberId == 0){
+        if (memberId == 0) {
             return articles
         }
 
         val filteredArticles = mutableListOf<Article>()
 
-        for (article in articles){
-            if (article.memberId == memberId){
+        for (article in articles) {
+            if (article.memberId == memberId) {
                 filteredArticles.add(article)
             }
         }

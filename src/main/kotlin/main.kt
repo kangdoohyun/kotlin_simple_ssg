@@ -13,7 +13,6 @@ fun main() {
 
     memberRepository.makeTestMember()
     boardRepository.makeTestBoard()
-    articleRepository.makeTestArticles()
 
     loginedMember = memberRepository.getMemberById(1)
 
