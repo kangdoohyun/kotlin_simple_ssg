@@ -1,6 +1,4 @@
 class ArticleRepository {
-    private val articles = mutableListOf<Article>()
-
     fun getArticles(): MutableList<Article> {
         val lastId = getLastId()
         val articles = mutableListOf<Article>()

@@ -1,6 +1,45 @@
+import java.lang.IndexOutOfBoundsException
+import kotlin.math.log
+
 class MemberRepository {
     private var members = mutableListOf<Member>()
     private var lastId = 0
+
+    fun getMembers(): MutableList<Member> {
+        val lastId = getLastId()
+        val members = mutableListOf<Member>()
+        for (id in 1..lastId) {
+            val member = memberFromFile("data/member/$id.json")
+            if (member != null) {
+                members.add(member)
+            }
+        }
+        return members
+    }
+
+    private fun memberFromFile(jsonFilePath: String): Member? {
+        val jsonStr = readStrFromFile(jsonFilePath)
+        if (jsonStr == "") {
+            return null
+        }
+        val map = mapFromJson(jsonStr)
+
+        val id = map["id"].toString().toInt()
+        val regDate = map["regDate"].toString()
+        val updateDate = map["updateDate"].toString()
+        val loginId = map["loginId"].toString()
+        val loginPw = map["loginPw"].toString()
+        val name = map["name"].toString()
+        val nickname = map["nickname"].toString()
+        val cellphoneNo = map["cellphoneNo"].toString()
+        val email = map["email"].toString()
+
+        return Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email)
+    }
+
+    private fun getLastId(): Int {
+        return readIntFromFile("data/member/lastId.txt")
+    }
 
     fun addMember(
         loginId: String,
@@ -10,10 +49,12 @@ class MemberRepository {
         cellphoneNo: String,
         email: String
     ) {
-        val id = ++lastId
+        val id = getLastId() + 1
         val regDate = Util.getNowDateStr()
         val updateDate = Util.getNowDateStr()
-        members.add(Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email))
+        val member = Member(id, regDate, updateDate, loginId, loginPw, name, nickname, cellphoneNo, email)
+        writeStrFile("data/member/$id.json", member.toJson())
+        writeIntFile("data/member/lastId.txt", id)
     }
 
     fun makeTestMember() {
@@ -28,25 +69,22 @@ class MemberRepository {
     }
 
     fun getMemberByLoginId(loginId: String): Member? {
-        for (member in members) {
-            if (member.loginId == loginId) {
-                return member
+        val members = getMembers()
+        for (i in 0 .. members.size){
+            try {
+                if (members[i].loginId == loginId){
+                    return members[i]
+                }
+            }
+            catch (e:IndexOutOfBoundsException){
+                return null
             }
         }
         return null
     }
 
     fun getMemberById(memberId: Int): Member? {
-        for (member in members) {
-            if (member.id == memberId) {
-                return member
-            }
-        }
-        return null
-    }
-
-    fun getMembers(): List<Member> {
-        return members
+        return memberFromFile("data/member/$memberId.json")
     }
 
 }

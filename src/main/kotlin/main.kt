@@ -11,7 +11,7 @@ val boardRepository = BoardRepository()
 fun main() {
     println("== SIMPLE SSG 시작 ==")
 
-    memberRepository.makeTestMember()
+//    memberRepository.makeTestMember()
     boardRepository.makeTestBoard()
 
     loginedMember = memberRepository.getMemberById(1)
