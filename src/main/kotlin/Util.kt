@@ -45,7 +45,14 @@ fun mapFromJson(jsonStr: String): Map<String, Any> {
     return map.toMap()
 }
 
+fun deleteFile(filePath: String) {
+    File(filePath).delete()
+}
+
 fun readStrFromFile(filePath: String): String {
+    if (!File(filePath).isFile){
+        return ""
+    }
     return File(filePath).readText(Charsets.UTF_8)
 }
 

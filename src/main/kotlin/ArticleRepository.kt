@@ -5,19 +5,10 @@ class ArticleRepository {
         val lastId = getLastId()
         val articles = mutableListOf<Article>()
         for (id in 1..lastId) {
-            val jsonStr = readStrFromFile("data/article/$id.json")
-            val jsonMap = mapFromJson(jsonStr)
-            articles.add(
-                Article(
-                    jsonMap["id"].toString().toInt(),
-                    jsonMap["regDate"].toString(),
-                    jsonMap["updateDate"].toString(),
-                    jsonMap["memberId"].toString().toInt(),
-                    jsonMap["boardId"].toString().toInt(),
-                    jsonMap["title"].toString(),
-                    jsonMap["body"].toString()
-                )
-            )
+            val article = articleFromFile("data/article/$id.json")
+            if (article != null) {
+                articles.add(article)
+            }
         }
         return articles
     }
@@ -26,18 +17,31 @@ class ArticleRepository {
         return readIntFromFile("data/article/lastId.txt")
     }
 
+    fun articleFromFile(jsonFilePath: String): Article? {
+        val jsonStr = readStrFromFile(jsonFilePath)
+        if (jsonStr == "") {
+            return null
+        }
+        val map = mapFromJson(jsonStr)
+
+        val id = map["id"].toString().toInt()
+        val regDate = map["regDate"].toString()
+        val updateDate = map["updateDate"].toString()
+        val boardId = map["boardId"].toString().toInt()
+        val memberId = map["memberId"].toString().toInt()
+        val title = map["title"].toString()
+        val body = map["body"].toString()
+
+        return Article(id, regDate, updateDate, boardId, memberId, title, body)
+    }
+
+
     fun deleteArticle(article: Article) {
-        articles.remove(article)
+        deleteFile("data/article/${article.id}.json")
     }
 
     fun getArticleById(id: Int): Article? {
-        for (article in articles) {
-            if (article.id == id) {
-                return article
-            }
-        }
-
-        return null
+        return articleFromFile("data/article/${id}.json")
     }
 
     fun addArticle(boardId: Int, memberId: Int, title: String, body: String): Int {
@@ -56,6 +60,16 @@ class ArticleRepository {
         article.title = title
         article.body = body
         article.updateDate = Util.getNowDateStr()
+        val newArticle = Article(
+            article.id,
+            article.regDate,
+            article.updateDate,
+            article.memberId,
+            article.boardId,
+            article.title,
+            article.body
+        )
+        writeStrFile("data/article/$id.json", newArticle.toJson())
     }
 
     fun getFilteredArticles(
