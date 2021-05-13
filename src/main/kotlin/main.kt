@@ -2,6 +2,7 @@ val systemController = SystemController()
 val memberController = MemberController()
 val articleController = ArticleController()
 val boardController = BoardController()
+val ssgController = SSGController()
 
 var loginedMember: Member? = null
 
@@ -63,7 +64,6 @@ fun main() {
                 memberController.info(rq)
             }
             "/board/list" -> {
-
                 boardController.list(rq)
             }
             "/board/make" -> {
@@ -74,6 +74,9 @@ fun main() {
             }
             "/board/delete" -> {
                 boardController.delete(rq)
+            }
+            "/ssg/build" -> {
+                ssgController.build()
             }
             else -> {
                 systemController.nonExistentCommand(rq)
