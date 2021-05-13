@@ -5,7 +5,7 @@ fun readLineTrim() = readLine()!!.trim()
 
 fun mapFromJson(jsonStr: String): Map<String, Any> {
     val map = mutableMapOf<String, Any>()
-    // json 에 {} 중가로를 제거한다 .drop()
+    // json 형식에 {} 중가로를 제거한다 .drop()
     var jsonStr = jsonStr.drop(1)
     jsonStr = jsonStr.dropLast(1)
     // ",\r\n" 기준으로 파싱한다 "," 만으로 할 경우엔 "안녕하세요, 저는" 이런입력값이 있으면 오류날 수 있기때문에 줄바꿈까지 기준으로잡는다

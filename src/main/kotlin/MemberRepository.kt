@@ -1,10 +1,6 @@
 import java.lang.IndexOutOfBoundsException
-import kotlin.math.log
 
 class MemberRepository {
-    private var members = mutableListOf<Member>()
-    private var lastId = 0
-
     fun getMembers(): MutableList<Member> {
         val lastId = getLastId()
         val members = mutableListOf<Member>()

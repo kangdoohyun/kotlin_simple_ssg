@@ -1,7 +1,7 @@
 class BoardController {
     fun list(rq: Rq) {
         println("번호 / 생성 날짜 / 게시판이름 / 게시판코드")
-        for (board in boardRepository.boards) {
+        for (board in boardRepository.getBoards()) {
             println("${board.id} / ${board.regDate} / ${board.name} / ${board.code}")
         }
     }
@@ -63,7 +63,7 @@ class BoardController {
             return
         }
 
-        boardRepository.boards.remove(board)
+        boardRepository.deleteBoard(board)
         println("${board.name}게시판이 삭제되었습니다")
     }
 

@@ -1,5 +1,5 @@
 class ArticleRepository {
-    fun getArticles(): MutableList<Article> {
+    private fun getArticles(): MutableList<Article> {
         val lastId = getLastId()
         val articles = mutableListOf<Article>()
         for (id in 1..lastId) {
@@ -15,7 +15,8 @@ class ArticleRepository {
         return readIntFromFile("data/article/lastId.txt")
     }
 
-    fun articleFromFile(jsonFilePath: String): Article? {
+
+    private fun articleFromFile(jsonFilePath: String): Article? {
         val jsonStr = readStrFromFile(jsonFilePath)
         if (jsonStr == "") {
             return null

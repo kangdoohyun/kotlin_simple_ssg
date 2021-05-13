@@ -12,7 +12,7 @@ fun main() {
     println("== SIMPLE SSG 시작 ==")
 
 //    memberRepository.makeTestMember()
-    boardRepository.makeTestBoard()
+//    boardRepository.makeTestBoard()
 
     loginedMember = memberRepository.getMemberById(1)
 
@@ -63,6 +63,7 @@ fun main() {
                 memberController.info(rq)
             }
             "/board/list" -> {
+
                 boardController.list(rq)
             }
             "/board/make" -> {

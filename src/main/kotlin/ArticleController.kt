@@ -106,7 +106,7 @@ class ArticleController {
             return
         }
         print("게시판 종류")
-        val boards: List<Board> = boardRepository.getboards()
+        val boards: List<Board> = boardRepository.getBoards()
         var boardSelectStr = ""
         for (board in boards){
             if (boardSelectStr.isNotEmpty()){
