@@ -130,7 +130,7 @@ class ArticleController {
 
 
 
-        val id = articleRepository.addArticle(boardId, loginedMember!!.id, title, body)
+        val id = articleRepository.addArticle(loginedMember!!.id,boardId, title, body)
 
         println("${id}번 게시물이 추가되었습니다.")
     }

@@ -29,6 +29,7 @@ fun main() {
         val rq = Rq(command)
 
         when (rq.actionPath) {
+
             "/system/exit" -> {
                 systemController.exit(rq)
                 break
